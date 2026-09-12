@@ -1,1 +1,1 @@
-# Nothub
+# Initial project setup
