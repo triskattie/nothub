@@ -26,5 +26,5 @@ jobs:
       - name: Install dependencies
         run: uv sync --locked
 
-      - name: Check app imports
-        run: uv run python -c "import main"
+      - name: Run tests
+        run: uv run python -m pytest
