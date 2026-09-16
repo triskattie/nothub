@@ -7,7 +7,9 @@ from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
 
 from alembic import context
-
+from dotenv import load_dotenv
+load_dotenv()
+from api.db import models
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -30,12 +32,12 @@ target_metadata = Base.metadata
 # can be acquired:
 # my_important_option = config.get_main_option("my_important_option")
 # ... etc.
-database_url = os.getenv("DATABASE_URL")
+alembic_database_url = os.getenv("ALEMBIC_DATABASE_URL")
 
-if not database_url:
-    raise RuntimeError("DATABASE_URL is not set")
+if not alembic_database_url:
+    raise RuntimeError("ALEMBIC_DATABASE_URL is not set")
 
-config.set_main_option("sqlalchemy.url", database_url)
+config.set_main_option("sqlalchemy.url", alembic_database_url)
 
 
 def run_migrations_offline() -> None:
