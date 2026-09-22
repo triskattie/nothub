@@ -8,7 +8,6 @@ from uuid import uuid4
 # Happy paths
 
 @pytest.mark.anyio
-@pytest.mark.xfail(reason="Create endpoint should return 201")
 async def test_create_entry_when_input_is_valid_persists_entry_and_returns_201(client, db_session: AsyncSession):
     response = await client.post("/entries", json={"provider": "internal", "payload": {"type": "idea"}})
 
@@ -50,7 +49,6 @@ async def test_get_entry_when_entry_exists_returns_entry_and_200(client, db_sess
     assert body["created_at"] is not None
 
 @pytest.mark.anyio
-@pytest.mark.xfail(reason="Delete endpoint should return 204 if succesful")
 async def test_delete_entry_when_entry_exists_removes_entry_and_returns_204(client, db_session: AsyncSession):
     entry = Entry(
         provider="internal",
@@ -121,7 +119,6 @@ async def test_create_entry_with_invalid_payload_returns_422(client):
 
 
 @pytest.mark.anyio
-@pytest.mark.xfail(reason="Not found should return 404")
 async def test_get_entry_when_entry_does_not_exist_returns_404(client):
     missing_id = uuid4()
     response = await client.get(f"/entries/{missing_id}")
@@ -129,7 +126,6 @@ async def test_get_entry_when_entry_does_not_exist_returns_404(client):
     assert response.status_code == 404
 
 @pytest.mark.anyio
-@pytest.mark.xfail(reason="Not found should return 404")
 async def test_delete_entry_when_entry_does_not_exist_returns_404(client):
     missing_id = uuid4()
     response = await client.delete(f"/entries/{missing_id}")

@@ -11,10 +11,6 @@ class EntryNotFound(Exception):
     status_code = 404
     detail = "Entry not found"
 
-class NoEntriesFound(Exception):
-    status_code = 404
-    detail = "No entries found"
-
 
 class EntryService():
     def __init__(self, repository: EntryRepository, session: AsyncSession):
@@ -29,8 +25,6 @@ class EntryService():
 
     async def list(self) -> list[Entry]:
         entries = await self.repository.list()
-        if entries is None:
-            raise NoEntriesFound()
         return entries
 
     async def create(self, payload: EntryCreate) -> Entry:
@@ -40,6 +34,8 @@ class EntryService():
 
     async def delete(self, entry_id: UUID) -> None:
         entry = await self.get(entry_id)
+        if entry is None:
+            raise EntryNotFound()
         await self.repository.delete(entry)
         await self.session.commit()
 
