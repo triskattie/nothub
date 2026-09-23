@@ -6,10 +6,7 @@ from api.db.session import SessionDep
 from .schemas import EntryCreate
 from sqlalchemy.ext.asyncio import AsyncSession
 from api.db.models import Entry
-
-class EntryNotFound(Exception):
-    status_code = 404
-    detail = "Entry not found"
+from .exceptions import EntryNotFoundError
 
 
 class EntryService():
@@ -20,7 +17,7 @@ class EntryService():
     async def get(self, entry_id: UUID) -> Entry:
         entry = await self.repository.get(entry_id)
         if entry is None:
-            raise EntryNotFound()
+            raise EntryNotFoundError(f"Entry {entry_id} does not exist.")
         return entry
 
     async def list(self) -> list[Entry]:
@@ -35,7 +32,7 @@ class EntryService():
     async def delete(self, entry_id: UUID) -> None:
         entry = await self.get(entry_id)
         if entry is None:
-            raise EntryNotFound()
+            raise EntryNotFoundError(f"Entry {entry_id} does not exist.")
         await self.repository.delete(entry)
         await self.session.commit()
 
