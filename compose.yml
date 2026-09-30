@@ -8,11 +8,11 @@ services:
     env_file:
       - .env
     depends_on:
-      db:
-        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
 
   db:
-    image: postgres:18
+    image: postgres:17
     env_file:
       - .env
     volumes:
@@ -24,6 +24,17 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+  
+  migrate:
+    build:
+      context: .
+      dockerfile: api/Dockerfile
+    env_file:
+      - .env
+    command: uv run alembic upgrade head
+    depends_on:
+      db:
+        condition: service_healthy
 
 volumes:
   postgres_data:
