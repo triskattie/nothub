@@ -32,12 +32,12 @@ target_metadata = Base.metadata
 # can be acquired:
 # my_important_option = config.get_main_option("my_important_option")
 # ... etc.
-alembic_database_url = os.getenv("ALEMBIC_DATABASE_URL")
+database_url = os.getenv("DATABASE_URL")
 
-if not alembic_database_url:
-    raise RuntimeError("ALEMBIC_DATABASE_URL is not set")
+if not database_url:
+    raise RuntimeError("DATABASE_URL is not set")
 
-config.set_main_option("sqlalchemy.url", alembic_database_url)
+config.set_main_option("sqlalchemy.url", database_url)
 
 
 def run_migrations_offline() -> None:

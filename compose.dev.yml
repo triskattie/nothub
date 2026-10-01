@@ -1,0 +1,22 @@
+services:
+  api:
+    image: nothub-dev
+    build:
+      context: .
+      dockerfile: api/Dockerfile
+    pull_policy: build
+    develop:
+      watch:
+        - action: rebuild
+          path: ./api
+    
+  db:
+    ports: 
+      - "5432:5432"
+  
+  migrate:
+    image: nothub-dev
+    build:
+      context: .
+      dockerfile: api/Dockerfile
+    pull_policy: build
