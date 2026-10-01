@@ -5,6 +5,10 @@ services:
       context: .
       dockerfile: api/Dockerfile
     pull_policy: build
+    develop:
+      watch:
+        - action: rebuild
+          path: ./api
     
   db:
     ports: 
