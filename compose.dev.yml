@@ -1,6 +1,6 @@
 services:
   api:
-    image: nothub-dev
+    image: nothub-api-dev
     build:
       context: .
       dockerfile: api/Dockerfile
@@ -15,8 +15,19 @@ services:
       - "5432:5432"
   
   migrate:
-    image: nothub-dev
+    image: nothub-api-dev
     build:
       context: .
       dockerfile: api/Dockerfile
     pull_policy: build
+
+  web:
+    image: nothub-web-dev
+    build:
+      context: .
+      dockerfile: web/Dockerfile
+    pull_policy: build
+    develop:
+      watch:
+        - action: rebuild
+          path: ./web

@@ -1,0 +1,22 @@
+<article class="entry">
+    <div class="entry-top">
+        <div>
+            <h2>{{ entry.payload.title }}</h2>
+            <p>{{ entry.payload.description }}</p>
+        </div>
+        <form
+            method="post"
+            action="/entries/{{ entry.id }}/delete"
+            onsubmit="return confirm('Delete this entry?');"
+        >
+            <button type="submit">
+                Delete
+            </button>
+        </form>
+    </div>
+    <p class="entry-meta">
+        <span>{{ entry.provider }}</span>
+        <span aria-hidden="true">·</span>
+        <time datetime="{{ entry.created_at }}">{{ entry.created_at }}</time>
+    </p>
+</article>
