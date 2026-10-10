@@ -16,4 +16,10 @@ COPY alembic ./alembic
 
 EXPOSE 8000
 
+ARG APP_VERSION=dev
+
+ENV APP_VERSION=${APP_VERSION}
+
+LABEL org.opencontainers.image.version="${APP_VERSION}"
+
 CMD ["uv", "run", "--no-dev", "uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8000"]
