@@ -1,7 +1,11 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Nothub</h1>
+    <div class="title">
+        <h1>Nothub</h1>
+        <p><small>Version: {{ version }}</small></p>        
+    </div>
+
     {% for entry in entries %}
         {% include "partials/entry.html" %}
     {% endfor %}

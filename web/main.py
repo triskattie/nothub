@@ -19,6 +19,10 @@ async def index(request: Request):
         response.raise_for_status()
         entries = response.json()
 
+        version_response = await client.get("http://api:8000/version") # TODO: CHANGE THIS TO ENV VARIABLE
+        version_response.raise_for_status()
+        version = version_response.json()["version"]
+
     # Make the datetime readable instead of something like 2026-10-09T19:35:06.148548, it will be something like 09/10/2026 19:35
     for entry in entries:
         entry["created_at"] = datetime.fromisoformat(entry["created_at"]).strftime("%d/%m/%Y %H:%M")
@@ -27,7 +31,8 @@ async def index(request: Request):
         request=request,
         name="index.html",
         context={
-            "entries": entries
+            "entries": entries,
+            "version": version
         }
     )
 
