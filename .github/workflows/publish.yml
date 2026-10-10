@@ -42,3 +42,14 @@ jobs:
           tags: |
             ghcr.io/${{ github.repository }}:${{ github.ref_name }}
             ghcr.io/${{ github.repository }}:latest
+      
+      - name: build and push web image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: web/Dockerfile
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository }}-web:${{ github.ref_name }}
+            ghcr.io/${{ github.repository }}-web:latest

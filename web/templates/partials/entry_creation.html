@@ -1,0 +1,14 @@
+<article class="entry-create">
+    <h1>Create a new entry</h1>
+    <form
+    method="post"
+    action="/entries/create"
+    onsubmit="return('Are you sure you want to submit a new entry?')"
+    >
+    <label for="title">Title</label><br>
+    <input type="text" name="title">
+    <label for description>Description</label><br>
+    <input type="text" name="description">
+    <button type="submit">Submit</button>
+</form>
+</article>

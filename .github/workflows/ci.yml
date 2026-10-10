@@ -60,4 +60,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Build API image
-        run: docker compose build
+        run: docker build --tag nothub-api:ci --file api/Dockerfile .
+
+      - name: Build web image
+        run: docker build --tag nothub-web:ci --file web/Dockerfile .
