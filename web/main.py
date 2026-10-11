@@ -52,9 +52,10 @@ async def delete_entry(entry_id: UUID):
     )
 
 @app.post("/entries/create")
-async def create_entry(title: str = Form(...), description: str = Form(...)):
+async def create_entry(title: str = Form(...), description: str = Form(...), type: str = Form(None)):
     entry = {
         "provider": "web",
+        "type": type,
         "payload": {
             "title": title,
             "description": description
@@ -92,21 +93,29 @@ async def edit_entry_page(entry_id: UUID, request: Request):
     )
 
 @app.post("/entries/{entry_id}/edit")
-async def edit_entry(entry_id: UUID, title: str = Form(...), description: str = Form(...)):
+async def edit_entry(entry_id: UUID, title: str = Form(...), description: str = Form(...), type: str = Form(None)):
     async with httpx.AsyncClient() as client:
         original_response = await client.get(f"http://api:8000/entries/{entry_id}") # TODO: MAKE THIS AN ENV VARIABLE
         original_response.raise_for_status()
-        original = original_response.json()["payload"]
+        entry = original_response.json()
 
-        changed_fields = {}
-        if title != original["title"]:
-            changed_fields["title"] = title
+        patch = {}
+        payload_changes = {}
+        if title != entry["payload"]["title"]:
+            payload_changes["title"] = title
 
-        if description != original["description"]:
-            changed_fields["description"] = description
+        if description != entry["payload"]["description"]:
+            payload_changes["description"] = description
 
-        if changed_fields:
-            response = await client.patch(f"http://api:8000/entries/{entry_id}", json={"payload": changed_fields})
+        if payload_changes:
+            patch["payload"] = payload_changes
+
+        type = type or None
+        if type != entry.get("type"):
+            patch["type"] = type
+
+        if patch:
+            response = await client.patch(f"http://api:8000/entries/{entry_id}", json=patch)
             response.raise_for_status()
 
     return RedirectResponse(
