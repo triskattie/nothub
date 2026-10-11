@@ -45,4 +45,4 @@ test:
 
     printf '\n%s\n' '--- Running tests ---'
     DATABASE_URL=postgresql+asyncpg://postgres:postgres@127.0.0.1:5432/nothub_test \
-      uv run pytest -ra -v --color=yes
+      uv run coverage run -m pytest -ra -v --color=yes
