@@ -7,6 +7,7 @@ from .schemas import EntryCreate
 from sqlalchemy.ext.asyncio import AsyncSession
 from api.db.models import Entry
 from .exceptions import EntryNotFoundError
+from pydantic import JsonValue
 
 
 class EntryService():
@@ -35,6 +36,12 @@ class EntryService():
             raise EntryNotFoundError(f"Entry {entry_id} does not exist.")
         await self.repository.delete(entry)
         await self.session.commit()
+
+    async def patch_payload(self, entry_id: UUID, payload_changes: dict[str, JsonValue]) -> Entry:
+        entry = await self.get(entry_id)
+        await self.repository.patch_payload(entry, payload_changes)
+        await self.session.commit()
+        return entry
 
 
 def get_entry_service(session: SessionDep) -> EntryService:

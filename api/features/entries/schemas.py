@@ -12,3 +12,6 @@ class EntryResponse(BaseModel):
     provider: str
     payload: dict[str, JsonValue]
     created_at: datetime
+
+class EntryPayloadPatch(BaseModel):
+    fields: dict[str, JsonValue]
