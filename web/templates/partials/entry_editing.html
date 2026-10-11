@@ -1,0 +1,13 @@
+<article class="entry-edit">
+    <h1>Edit entry</h1>
+    <form
+    method="post"
+    action="/entries/{{ entry.id }}/edit"
+    onsubmit="return('Are you sure you want edit this entry?')"
+    >
+    <label for="title">Title</label><br>
+    <input type="text" name="title" value="{{ entry.payload['title'] }}">
+    <label for description>Description</label><br>
+    <input type="text" name="description" value="{{ entry.payload['description'] }}">
+    <button type="submit">Submit</button>
+</article>

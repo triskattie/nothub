@@ -29,3 +29,9 @@ class EntryRepository:
 
     async def delete(self, entry: Entry) -> None:
         await self.session.delete(entry)
+
+    async def patch_payload(self, entry: Entry, payload_changes: dict[str, Any]):
+        entry.payload = {**entry.payload, **payload_changes}
+        await self.session.flush()
+        await self.session.refresh(entry)
+        return entry

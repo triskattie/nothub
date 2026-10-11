@@ -4,15 +4,23 @@
             <h2>{{ entry.payload.title }}</h2>
             <p>{{ entry.payload.description }}</p>
         </div>
-        <form
-            method="post"
-            action="/entries/{{ entry.id }}/delete"
-            onsubmit="return confirm('Delete this entry?');"
-        >
-            <button type="submit">
-                Delete
-            </button>
-        </form>
+        <div class="action-buttons">
+            <a href="/entries/{{ entry.id }}/edit">
+                <button type="button">
+                    Edit
+                </button>
+            </a>
+            <form
+                method="post"
+                action="/entries/{{ entry.id }}/delete"
+                onsubmit="return confirm('Delete this entry?');"
+            >
+                <button type="submit">
+                    Delete
+                </button>
+            </form>            
+        </div>
+
     </div>
     <p class="entry-meta">
         <span>{{ entry.provider }}</span>

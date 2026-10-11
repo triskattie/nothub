@@ -70,3 +70,46 @@ async def create_entry(title: str = Form(...), description: str = Form(...)):
         url="/",
         status_code=303 # TODO: ADD DETAIL?
     )
+
+@app.get("/entries/{entry_id}/edit")
+async def edit_entry_page(entry_id: UUID, request: Request):
+    async with httpx.AsyncClient() as client:
+        response = await client.get(f"http://api:8000/entries/{entry_id}") # TODO: MAKE THIS AN ENV VARIABLE
+        response.raise_for_status()
+        entry = response.json()
+
+        version_response = await client.get("http://api:8000/version") # TODO: CHANGE THIS TO ENV VARIABLE
+        version_response.raise_for_status()
+        version = version_response.json()["version"]
+
+    return templates.TemplateResponse(
+        request=request,
+        name="edit_entry.html",
+        context={
+            "entry": entry,
+            "version": version
+        }
+    )
+
+@app.post("/entries/{entry_id}/edit")
+async def edit_entry(entry_id: UUID, title: str = Form(...), description: str = Form(...)):
+    async with httpx.AsyncClient() as client:
+        original_response = await client.get(f"http://api:8000/entries/{entry_id}") # TODO: MAKE THIS AN ENV VARIABLE
+        original_response.raise_for_status()
+        original = original_response.json()["payload"]
+
+        changed_fields = {}
+        if title != original["title"]:
+            changed_fields["title"] = title
+
+        if description != original["description"]:
+            changed_fields["description"] = description
+
+        if changed_fields:
+            response = await client.patch(f"http://api:8000/entries/{entry_id}/payload", json={"fields": changed_fields})
+            response.raise_for_status()
+
+    return RedirectResponse(
+        url="/",
+        status_code=303
+    )
