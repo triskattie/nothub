@@ -44,4 +44,5 @@ test:
     "${compose[@]}" up -d --build --wait
 
     printf '\n%s\n' '--- Running tests ---'
-    uv run pytest -ra -v --color=yes
+    DATABASE_URL=postgresql+asyncpg://postgres:postgres@127.0.0.1:5432/nothub_test \
+      uv run pytest -ra -v --color=yes
