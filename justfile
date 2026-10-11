@@ -7,6 +7,9 @@ dev-down:
 dev-build:
     docker compose -f compose.yml -f compose.dev.yml build
 
+revision message:
+    DATABASE_URL=postgresql+asyncpg://postgres:postgres@localhost:5432/nothub uv run alembic revision --autogenerate -m "{{message}}"
+
 test:
     #!/usr/bin/env bash
     set -Eeuo pipefail
