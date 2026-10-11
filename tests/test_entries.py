@@ -119,7 +119,7 @@ async def test_patch_entry_when_entry_exists_returns_entry_and_200(client, db_se
     await db_session.refresh(entry)
     modification = {"title": "content"}
 
-    response = await client.patch(f"/entries/{entry.id}/payload", json={"fields": modification})
+    response = await client.patch(f"/entries/{entry.id}", json={"payload": modification})
 
     assert response.status_code == 200
 
@@ -170,12 +170,12 @@ async def test_delete_entry_with_invalid_uuid_returns_422(client):
 async def test_patch_entry_payload_when_entry_does_not_exist_returns_404(client):
     missing_id = uuid4()
     modification = {"title": "content"}
-    response = await client.patch(f"/entries/{missing_id}/payload", json={"fields": modification})
+    response = await client.patch(f"/entries/{missing_id}", json={"fields": modification})
 
     assert response.status_code == 404
 
 @pytest.mark.anyio
 async def test_patch_entry_payload_with_invalid_uuid_returns_422(client):
-    response = await client.patch("/entries/1/payload")
+    response = await client.patch("/entries/1")
 
     assert response.status_code == 422

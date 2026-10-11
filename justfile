@@ -4,8 +4,14 @@ dev:
 dev-down:
     docker compose -f compose.yml -f compose.dev.yml down
 
+dev-db:
+    docker compose -f compose.yml -f compose.dev.yml exec db psql -U postgres -d nothub
+
 dev-build:
     docker compose -f compose.yml -f compose.dev.yml build
+
+revision message:
+    DATABASE_URL=postgresql+asyncpg://postgres:postgres@localhost:5432/nothub uv run alembic revision --autogenerate -m "{{message}}"
 
 test:
     #!/usr/bin/env bash

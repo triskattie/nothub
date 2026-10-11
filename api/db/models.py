@@ -10,6 +10,7 @@ class Entry(Base):
 
     id: Mapped[UUID] = mapped_column(primary_key=True, default=uuid4)
     provider: Mapped[str] = mapped_column()
+    type: Mapped[str] = mapped_column(nullable=True)
     payload: Mapped[dict] = mapped_column(JSONB)
     created_at: Mapped[datetime] = mapped_column(server_default=func.now())
 

@@ -9,5 +9,8 @@
     <input type="text" name="title" value="{{ entry.payload['title'] }}">
     <label for description>Description</label><br>
     <input type="text" name="description" value="{{ entry.payload['description'] }}">
+    <label for="type">Type</label><br>
+    <input type="text" name="type" value="{{ entry.type if entry.type != None else ''}}" >
     <button type="submit">Submit</button>
+    </form>
 </article>

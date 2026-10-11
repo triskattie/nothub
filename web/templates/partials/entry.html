@@ -1,7 +1,13 @@
 <article class="entry">
     <div class="entry-top">
         <div>
-            <h2>{{ entry.payload.title }}</h2>
+            <div class="title-and-type">
+                <h2>{{ entry.payload.title }}</h2>
+                {% if entry.type is not none %}
+                    <p><strong>{{ entry.type }}</strong></p>
+                {% endif %}          
+            </div>
+
             <p>{{ entry.payload.description }}</p>
         </div>
         <div class="action-buttons">

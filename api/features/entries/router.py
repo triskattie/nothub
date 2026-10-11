@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from .schemas import EntryResponse, EntryCreate, EntryPayloadPatch
+from .schemas import EntryResponse, EntryCreate, EntryPatch
 from uuid import UUID
 from .service import EntryServiceDep
 
@@ -23,6 +23,6 @@ async def create_entry(payload: EntryCreate, service: EntryServiceDep):
 async def delete_entry(entry_id: UUID, service: EntryServiceDep):
     return await service.delete(entry_id)
 
-@router.patch("/{entry_id}/payload", response_model=EntryResponse)
-async def patch_entry_payload(entry_id: UUID, patch: EntryPayloadPatch, service: EntryServiceDep):
-    return await service.patch_payload(entry_id, patch.fields)
+@router.patch("/{entry_id}", response_model=EntryResponse)
+async def patch_entry_payload(entry_id: UUID, patch: EntryPatch, service: EntryServiceDep):
+    return await service.patch(entry_id, patch)

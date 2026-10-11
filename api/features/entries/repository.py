@@ -9,7 +9,7 @@ class EntryRepository:
     def __init__(self, session: AsyncSession):
         self.session = session
 
-    async def get(self, entry_id: UUID):
+    async def get(self, entry_id: UUID) -> Entry:
         return await self.session.get(Entry, entry_id)
 
     async def list(self) -> list[Entry]:
@@ -17,9 +17,10 @@ class EntryRepository:
         result = await self.session.scalars(stmt)
         return list(result.all())
 
-    async def create(self, provider: str, payload: dict[str, Any]):
+    async def create(self, provider: str, payload: dict[str, Any], type: str = None,) -> Entry:
         entry = Entry(
             provider=provider,
+            type=type,
             payload=payload
         )
         self.session.add(entry)
@@ -29,9 +30,3 @@ class EntryRepository:
 
     async def delete(self, entry: Entry) -> None:
         await self.session.delete(entry)
-
-    async def patch_payload(self, entry: Entry, payload_changes: dict[str, Any]):
-        entry.payload = {**entry.payload, **payload_changes}
-        await self.session.flush()
-        await self.session.refresh(entry)
-        return entry

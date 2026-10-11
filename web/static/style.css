@@ -74,3 +74,17 @@ hr {
 .action-buttons button {
   margin-right: 1rem;
 }
+
+.title-and-type {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.title-and-type h2 {
+  margin: 0;
+}
+
+.title-and-type p {
+  margin: 0;
+}
