@@ -4,6 +4,9 @@ dev:
 dev-down:
     docker compose -f compose.yml -f compose.dev.yml down
 
+dev-db:
+    docker compose -f compose.yml -f compose.dev.yml exec db psql -U postgres -d nothub
+
 dev-build:
     docker compose -f compose.yml -f compose.dev.yml build
 

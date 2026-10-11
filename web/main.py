@@ -106,7 +106,7 @@ async def edit_entry(entry_id: UUID, title: str = Form(...), description: str = 
             changed_fields["description"] = description
 
         if changed_fields:
-            response = await client.patch(f"http://api:8000/entries/{entry_id}/payload", json={"fields": changed_fields})
+            response = await client.patch(f"http://api:8000/entries/{entry_id}", json={"payload": changed_fields})
             response.raise_for_status()
 
     return RedirectResponse(
