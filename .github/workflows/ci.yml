@@ -31,6 +31,8 @@ jobs:
 
       - name: Run tests
         run: just test
+        env:
+          APP_VERSION: test
 
   docker-build:
     runs-on: ubuntu-latest
