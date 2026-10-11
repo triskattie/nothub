@@ -1,0 +1,36 @@
+services:
+  db:
+    environment:
+      POSTGRES_DB: nothub_test
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+
+  api:
+    environment:
+      DATABASE_URL: postgresql+asyncpg://postgres:postgres@db:5432/nothub_test
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/version', timeout=2)"
+      interval: 2s
+      timeout: 3s
+      retries: 30
+      start_period: 5s
+
+  migrate:
+    environment:
+      DATABASE_URL: postgresql+asyncpg://postgres:postgres@db:5432/nothub_test
+
+  web:
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/', timeout=2)"
+      interval: 2s
+      timeout: 3s
+      retries: 30
+      start_period: 5s

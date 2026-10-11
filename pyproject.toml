@@ -21,6 +21,6 @@ dev = [
 ]
 
 [tool.pytest.ini_options]
-testpaths = ["tests"]
+testpaths = ["tests", "web/tests"]
 pythonpath = ["."]
 env_files = [".env.test"]
