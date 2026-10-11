@@ -13,25 +13,6 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
-    services:
-      postgres:
-        image: postgres:18
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: test_db
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd "pg_isready -U postgres -d test_db"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-
-    env:
-      DATABASE_URL: postgresql+asyncpg://postgres:postgres@localhost:5432/test_db
-      ALEMBIC_DATABASE_URL: postgresql+asyncpg://postgres:postgres@localhost:5432/test_db
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -39,17 +20,19 @@ jobs:
       - name: Install uv
         uses: astral-sh/setup-uv@v6
 
+      - name: Install just
+        uses: extractions/setup-just@v4
+
       - name: Set up Python
         run: uv python install 3.14
 
       - name: Install dependencies
         run: uv sync --locked
 
-      - name: Run database migrations
-        run: uv run alembic upgrade head
-
       - name: Run tests
-        run: uv run pytest
+        run: just test
+        env:
+          APP_VERSION: test
 
   docker-build:
     runs-on: ubuntu-latest

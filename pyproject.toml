@@ -15,12 +15,20 @@ dependencies = [
 
 [dependency-groups]
 dev = [
+    "coverage>=7.16.2",
     "httpx2>=2.13.0",
     "pytest>=9.1.1",
     "pytest-dotenv>=0.5.2",
 ]
 
 [tool.pytest.ini_options]
-testpaths = ["tests"]
+testpaths = ["tests", "web/tests"]
 pythonpath = ["."]
 env_files = [".env.test"]
+
+[tool.coverage.run]
+source = ["api"]
+branch = true
+
+[tool.coverage.report]
+show_missing = true

@@ -32,8 +32,6 @@ class EntryService():
 
     async def delete(self, entry_id: UUID) -> None:
         entry = await self.get(entry_id)
-        if entry is None:
-            raise EntryNotFoundError(f"Entry {entry_id} does not exist.")
         await self.repository.delete(entry)
         await self.session.commit()
 
