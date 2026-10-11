@@ -12,6 +12,7 @@ test:
     set -Eeuo pipefail
 
     compose=(docker compose -p nothub-test -f compose.yml -f compose.dev.yml -f compose.test.yml)
+    generated_env=0
 
     cleanup() {
       test_status=$?
@@ -23,10 +24,18 @@ test:
           test_status=1
         fi
       fi
+      if [ "$generated_env" -eq 1 ]; then
+        rm -f .env
+      fi
       exit "$test_status"
     }
 
     trap cleanup EXIT
+
+    if [ ! -f .env ]; then
+      cp .env.example .env
+      generated_env=1
+    fi
 
     printf '%s\n' '--- Removing previous test database ---'
     "${compose[@]}" down --volumes --remove-orphans
