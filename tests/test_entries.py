@@ -108,6 +108,28 @@ async def test_list_entries_when_entries_exist_returns_entries_and_200(client, d
     assert response_entry2["provider"] == entry2.provider
     assert response_entry2["payload"] == entry2.payload
 
+@pytest.mark.anyio
+async def test_patch_entry_when_entry_exists_returns_entry_and_200(client, db_session: AsyncSession):
+    entry = Entry(
+        provider="internal",
+        payload={"test": "testcontent"}
+    )
+    db_session.add(entry)
+    await db_session.commit()
+    await db_session.refresh(entry)
+    modication = {"payload": {"edited": "content"}}
+
+    response = await client.patch(f"/entry/{entry.id}")
+
+    assert response.status_code == 200
+
+    body = response.json()
+
+    assert body["id"] == str(entry.id)
+    assert body["provider"] == "internal"
+    assert body["payload"] == {"edited": "content"}
+
+
 # Error paths
 
 
@@ -141,5 +163,18 @@ async def test_get_entry_with_invalid_uuid_returns_422(client):
 @pytest.mark.anyio
 async def test_delete_entry_with_invalid_uuid_returns_422(client):
     response = await client.delete(f"/entries/1")
+
+    assert response.status_code == 422
+
+@pytest.mark.anyio
+async def test_patch_entry_when_entry_does_not_exist_returns_404(client):
+    missing_id = uuid4()
+    response = await client.patch(f"/entries/{missing_id}")
+
+    assert response.status_code == 404
+
+@pytest.mark.anyio
+async def test_patch_entry_with_invalid_uuid_returns_422(client):
+    response = await client.patch("/entries/1")
 
     assert response.status_code == 422
